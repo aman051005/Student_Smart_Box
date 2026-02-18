@@ -1,0 +1,2178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Smart Box</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1100px;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(to right, #4a00e0, #8e2de2);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .auth-buttons {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .auth-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+        
+        .auth-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 5px;
+            margin-top: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin-bottom: 10px;
+        }
+        
+        .content {
+            padding: 30px;
+            min-height: 500px;
+        }
+        
+        .view {
+            display: none;
+        }
+        
+        .active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Home Page Styles */
+        .home-content {
+            text-align: center;
+            padding: 40px 20px;
+        }
+        
+        .home-title {
+            font-size: 2.8rem;
+            color: #4a00e0;
+            margin-bottom: 20px;
+        }
+        
+        .home-subtitle {
+            font-size: 1.3rem;
+            color: #666;
+            margin-bottom: 40px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-top: 40px;
+        }
+        
+        .feature-card {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        .feature-card i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            background: linear-gradient(to right, #4a00e0, #8e2de2);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .feature-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+            color: #4a00e0;
+        }
+        
+        .feature-card p {
+            color: #666;
+            line-height: 1.5;
+        }
+        
+        /* Login/Register Form Styles */
+        .auth-container {
+            max-width: 450px;
+            margin: 0 auto;
+            padding: 30px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .auth-title {
+            text-align: center;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: #4a00e0;
+        }
+        
+        .auth-subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #444;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .form-control:focus {
+            border-color: #8e2de2;
+            box-shadow: 0 0 0 2px rgba(142, 45, 226, 0.2);
+            outline: none;
+        }
+        
+        .btn {
+            background: linear-gradient(to right, #4a00e0, #8e2de2);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            width: 100%;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .btn i {
+            margin-right: 8px;
+        }
+        
+        .auth-footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #666;
+        }
+        
+        .auth-link {
+            color: #4a00e0;
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        
+        .auth-link:hover {
+            text-decoration: underline;
+        }
+        
+        /* Dashboard Styles */
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(to right, #4a00e0, #8e2de2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+        }
+        
+        .user-details h3 {
+            font-size: 1.3rem;
+            color: #4a00e0;
+            margin-bottom: 5px;
+        }
+        
+        .user-details p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .dashboard-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .action-btn {
+            background: white;
+            border: 1px solid #ddd;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .action-btn:hover {
+            background: #f5f5f5;
+            transform: translateY(-2px);
+        }
+        
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+        
+        .dashboard-card {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        .dashboard-card i {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            background: linear-gradient(to right, #4a00e0, #8e2de2);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .dashboard-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+            color: #4a00e0;
+        }
+        
+        .dashboard-card p {
+            color: #666;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+        
+        /* Resource Pages Styles */
+        .resource-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .resource-title {
+            font-size: 1.8rem;
+            color: #4a00e0;
+            margin-bottom: 5px;
+        }
+        
+        .resource-subtitle {
+            color: #666;
+            margin-bottom: 20px;
+        }
+        
+        .resource-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .resource-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .resource-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        .resource-card i {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: #4a00e0;
+        }
+        
+        .resource-card h4 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: #4a00e0;
+        }
+        
+        .resource-card p {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+        
+        .resource-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: #888;
+        }
+        
+        /* Subject Viewer Styles */
+        .branch-grid, .semester-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .branch-card, .semester-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .branch-card:hover, .semester-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            background: linear-gradient(to right, #4a00e0, #8e2de2);
+            color: white;
+        }
+        
+        .branch-card i, .semester-card i {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .subject-list {
+            margin-top: 20px;
+        }
+        
+        .subject-item {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+            display: flex;
+            align-items: center;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        
+        .subject-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .subject-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(to right, #4a00e0, #8e2de2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            color: white;
+        }
+        
+        .subject-details {
+            flex: 1;
+        }
+        
+        .subject-name {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        
+        .subject-code {
+            font-size: 0.85rem;
+            color: #666;
+        }
+        
+        /* Unit View Styles */
+        .unit-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .unit-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .unit-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            background: linear-gradient(to right, #4a00e0, #8e2de2);
+            color: white;
+        }
+        
+        .unit-card i {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .unit-content {
+            margin-top: 20px;
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .unit-topic {
+            padding: 15px;
+            margin-bottom: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #8e2de2;
+        }
+        
+        .unit-topic h4 {
+            color: #4a00e0;
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+        }
+        
+        .unit-topic p {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+        
+        .pdf-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(to right, #4a00e0, #8e2de2);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+        
+        .pdf-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .back-btn {
+            margin-bottom: 20px;
+            background: linear-gradient(to right, #8e2de2, #4a00e0);
+            width: auto;
+            padding: 10px 20px;
+        }
+        
+        .branch-title, .semester-title, .subject-title {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            color: #4a00e0;
+        }
+        
+        .branch-description, .semester-description, .subject-description {
+            color: #666;
+            margin-bottom: 20px;
+        }
+        
+        .view-subjects-btn {
+            margin-top: 20px;
+            width: 100%;
+        }
+        
+        .branch-info, .subject-info {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f5f5f5;
+            border-radius: 10px;
+        }
+        
+        .branch-icon-large, .subject-icon-large {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(to right, #4a00e0, #8e2de2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            color: white;
+            font-size: 1.5rem;
+        }
+        
+        .branch-details, .subject-details-large {
+            flex: 1;
+        }
+        
+        @media (max-width: 768px) {
+            .auth-buttons {
+                position: static;
+                justify-content: center;
+                margin-top: 15px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .home-title {
+                font-size: 2.2rem;
+            }
+            
+            .branch-grid, .semester-grid, .unit-grid {
+                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            .dashboard-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .dashboard-actions {
+                width: 100%;
+                justify-content: space-between;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Student Smart Box</h1>
+            <p class="subtitle">Your All-in-One Academic Companion</p>
+            <div class="auth-buttons">
+                <button class="auth-btn" onclick="showLogin()"><i class="fas fa-sign-in-alt"></i> Login</button>
+                <button class="auth-btn" onclick="showRegister()"><i class="fas fa-user-plus"></i> Register</button>
+            </div>
+        </header>
+        
+        <div class="content">
+            <!-- Home Page View -->
+            <div id="home-view" class="view active">
+                <div class="home-content">
+                    <h2 class="home-title">Welcome to Student Smart Box</h2>
+                    <p class="home-subtitle">A comprehensive platform to manage your academic journey, track your progress, and access all your study materials in one place.</p>
+                    
+                    <div class="features">
+                        <div class="feature-card">
+                            <i class="fas fa-book-open"></i>
+                            <h3>Subject Explorer</h3>
+                            <p>Browse subjects by semester and branch with detailed information and resources.</p>
+                        </div>
+                        <div class="feature-card">
+                            <i class="fas fa-tasks"></i>
+                            <h3>Progress Tracking</h3>
+                            <p>Monitor your academic progress and stay on top of your study goals.</p>
+                        </div>
+                        <div class="feature-card">
+                            <i class="fas fa-calendar-alt"></i>
+                            <h3>Study Planner</h3>
+                            <p>Plan your study schedule and never miss an important deadline.</p>
+                        </div>
+                        <div class="feature-card">
+                            <i class="fas fa-file-download"></i>
+                            <h3>Resource Library</h3>
+                            <p>Access notes, previous papers, and other study materials.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Login View -->
+            <div id="login-view" class="view">
+                <div class="auth-container">
+                    <h2 class="auth-title">Login to Your Account</h2>
+                    <p class="auth-subtitle">Enter your credentials to access your student dashboard</p>
+                    
+                    <form id="login-form">
+                        <div class="form-group">
+                            <label for="login-email">Email Address</label>
+                            <input type="email" id="login-email" class="form-control" placeholder="Enter your email" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="login-password">Password</label>
+                            <input type="password" id="login-password" class="form-control" placeholder="Enter your password" required>
+                        </div>
+                        
+                        <button type="submit" class="btn"><i class="fas fa-sign-in-alt"></i> Login</button>
+                    </form>
+                    
+                    <div class="auth-footer">
+                        <p>Don't have an account? <span class="auth-link" onclick="showRegister()">Register here</span></p>
+                        <p><span class="auth-link" onclick="goHome()">Back to Home</span></p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Register View -->
+            <div id="register-view" class="view">
+                <div class="auth-container">
+                    <h2 class="auth-title">Create New Account</h2>
+                    <p class="auth-subtitle">Join Student Smart Box to enhance your academic journey</p>
+                    
+                    <form id="register-form">
+                        <div class="form-group">
+                            <label for="register-name">Full Name</label>
+                            <input type="text" id="register-name" class="form-control" placeholder="Enter your full name" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="register-email">Email Address</label>
+                            <input type="email" id="register-email" class="form-control" placeholder="Enter your email" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="register-password">Password</label>
+                            <input type="password" id="register-password" class="form-control" placeholder="Create a password" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="register-confirm-password">Confirm Password</label>
+                            <input type="password" id="register-confirm-password" class="form-control" placeholder="Confirm your password" required>
+                        </div>
+                        
+                        <button type="submit" class="btn"><i class="fas fa-user-plus"></i> Register</button>
+                    </form>
+                    
+                    <div class="auth-footer">
+                        <p>Already have an account? <span class="auth-link" onclick="showLogin()">Login here</span></p>
+                        <p><span class="auth-link" onclick="goHome()">Back to Home</span></p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Dashboard View -->
+            <div id="dashboard-view" class="view">
+                <div class="dashboard-header">
+                    <div class="user-info">
+                        <div class="user-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="user-details">
+                            <h3 id="user-name">Student Name</h3>
+                            <p id="user-email">student@example.com</p>
+                        </div>
+                    </div>
+                    <div class="dashboard-actions">
+                        <button class="action-btn" onclick="goHome()">
+                            <i class="fas fa-home"></i> Home
+                        </button>
+                        <button class="action-btn" onclick="logout()">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </button>
+                    </div>
+                </div>
+                
+                <h2 class="branch-title">Student Dashboard</h2>
+                <p class="branch-description">Access all your academic resources in one place</p>
+                
+                <div class="dashboard-grid">
+                    <div class="dashboard-card" onclick="showSubjectViewer()">
+                        <i class="fas fa-book-open"></i>
+                        <h3>Subject Explorer</h3>
+                        <p>Browse subjects by semester and branch with detailed information and resources.</p>
+                        <div class="resource-meta">
+                            <span>Explore</span>
+                            <span><i class="fas fa-arrow-right"></i></span>
+                        </div>
+                    </div>
+                    
+                    <div class="dashboard-card" onclick="showPYQs()">
+                        <i class="fas fa-file-alt"></i>
+                        <h3>Previous Year Questions</h3>
+                        <p>Access question papers from previous years to prepare for your exams.</p>
+                        <div class="resource-meta">
+                            <span>Practice</span>
+                            <span><i class="fas fa-arrow-right"></i></span>
+                        </div>
+                    </div>
+                    
+                    <div class="dashboard-card" onclick="showCurriculum()">
+                        <i class="fas fa-graduation-cap"></i>
+                        <h3>Curriculum</h3>
+                        <p>View the complete syllabus and course structure for your program.</p>
+                        <div class="resource-meta">
+                            <span>Learn</span>
+                            <span><i class="fas fa-arrow-right"></i></span>
+                        </div>
+                    </div>
+                    
+                    <div class="dashboard-card" onclick="showNotes()">
+                        <i class="fas fa-sticky-note"></i>
+                        <h3>Study Notes</h3>
+                        <p>Access comprehensive notes and study materials for all subjects.</p>
+                        <div class="resource-meta">
+                            <span>Study</span>
+                            <span><i class="fas fa-arrow-right"></i></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- PYQs View -->
+            <div id="pyqs-view" class="view">
+                <button class="btn back-btn" onclick="goBackToDashboard()">
+                    <i class="fas fa-arrow-left"></i> Back to Dashboard
+                </button>
+                
+                <div class="resource-header">
+                    <div class="branch-icon-large">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <div class="branch-details">
+                        <h2 class="resource-title">Previous Year Questions</h2>
+                        <p class="resource-subtitle">Access question papers from previous years to prepare for your exams</p>
+                    </div>
+                </div>
+                
+                <div class="resource-grid">
+                    <div class="resource-card">
+                        <i class="fas fa-file-pdf"></i>
+                        <h4>2023 Question Papers</h4>
+                        <p>Complete set of question papers from 2023 examinations</p>
+                        <div class="resource-meta">
+                            <span>12 files</span>
+                            <span><i class="fas fa-download"></i></span>
+                        </div>
+                    </div>
+                    
+                    <div class="resource-card">
+                        <i class="fas fa-file-pdf"></i>
+                        <h4>2022 Question Papers</h4>
+                        <p>Complete set of question papers from 2022 examinations</p>
+                        <div class="resource-meta">
+                            <span>10 files</span>
+                            <span><i class="fas fa-download"></i></span>
+                        </div>
+                    </div>
+                    
+                    <div class="resource-card">
+                        <i class="fas fa-file-pdf"></i>
+                        <h4>2021 Question Papers</h4>
+                        <p>Complete set of question papers from 2021 examinations</p>
+                        <div class="resource-meta">
+                            <span>8 files</span>
+                            <span><i class="fas fa-download"></i></span>
+                        </div>
+                    </div>
+                    
+                    <div class="resource-card">
+                        <i class="fas fa-file-pdf"></i>
+                        <h4>2020 Question Papers</h4>
+                        <p>Complete set of question papers from 2020 examinations</p>
+                        <div class="resource-meta">
+                            <span>9 files</span>
+                            <span><i class="fas fa-download"></i></span>
+                        </div>
+                    </div>
+                    
+                    <div class="resource-card">
+                        <i class="fas fa-file-pdf"></i>
+                        <h4>Model Test Papers</h4>
+                        <p>Practice papers designed by faculty for exam preparation</p>
+                        <div class="resource-meta">
+                            <span>15 files</span>
+                            <span><i class="fas fa-download"></i></span>
+                        </div>
+                    </div>
+                    
+                    <div class="resource-card">
+                        <i class="fas fa-file-pdf"></i>
+                        <h4>Important Questions</h4>
+                        <p>Curated list of most important questions for each subject</p>
+                        <div class="resource-meta">
+                            <span>6 files</span>
+                            <span><i class="fas fa-download"></i></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Curriculum View -->
+            <div id="curriculum-view" class="view">
+                <button class="btn back-btn" onclick="goBackToDashboard()">
+                    <i class="fas fa-arrow-left"></i> Back to Dashboard
+                </button>
+                
+                <div class="resource-header">
+                    <div class="branch-icon-large">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <div class="branch-details">
+                        <h2 class="resource-title">Curriculum</h2>
+                        <p class="resource-subtitle">View the complete syllabus and course structure for your program</p>
+                    </div>
+                </div>
+                
+                <div class="resource-grid">
+                    <div class="resource-card">
+                        <i class="fas fa-book"></i>
+                        <h4>Complete Syllabus</h4>
+                        <p>Detailed syllabus for all semesters of your program</p>
+                        <div class="resource-meta">
+                            <span>PDF</span>
+                            <span><i class="fas fa-download"></i></span>
+                        </div>
+                    </div>
+                    
+                    <div class="resource-card">
+                        <i class="fas fa-calendar-alt"></i>
+                        <h4>Academic Calendar</h4>
+                        <p>Important dates and schedule for the academic year</p>
+                        <div class="resource-meta">
+                            <span>PDF</span>
+                            <span><i class="fas fa-download"></i></span>
+                        </div>
+                    </div>
+                    
+                    <div class="resource-card">
+                        <i class="fas fa-list-alt"></i>
+                        <h4>Course Structure</h4>
+                        <p>Detailed breakdown of courses and credits</p>
+                        <div class="resource-meta">
+                            <span>PDF</span>
+                            <span><i class="fas fa-download"></i></span>
+                        </div>
+                    </div>
+                    
+                    <div class="resource-card">
+                        <i class="fas fa-clipboard-list"></i>
+                        <h4>Evaluation Scheme</h4>
+                        <p>Grading system and evaluation criteria</p>
+                        <div class="resource-meta">
+                            <span>PDF</span>
+                            <span><i class="fas fa-download"></i></span>
+                        </div>
+                    </div>
+                    
+                    <div class="resource-card">
+                        <i class="fas fa-project-diagram"></i>
+                        <h4>Program Objectives</h4>
+                        <p>Educational objectives and outcomes of your program</p>
+                        <div class="resource-meta">
+                            <span>PDF</span>
+                            <span><i class="fas fa-download"></i></span>
+                        </div>
+                    </div>
+                    
+                    <div class="resource-card">
+                        <i class="fas fa-chalkboard-teacher"></i>
+                        <h4>Faculty Resources</h4>
+                        <p>Teaching plans and faculty guidelines</p>
+                        <div class="resource-meta">
+                            <span>PDF</span>
+                            <span><i class="fas fa-download"></i></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Notes View -->
+            <div id="notes-view" class="view">
+                <button class="btn back-btn" onclick="goBackToDashboard()">
+                    <i class="fas fa-arrow-left"></i> Back to Dashboard
+                </button>
+                
+                <div class="resource-header">
+                    <div class="branch-icon-large">
+                        <i class="fas fa-sticky-note"></i>
+                    </div>
+                    <div class="branch-details">
+                        <h2 class="resource-title">Study Notes</h2>
+                        <p class="resource-subtitle">Access comprehensive notes and study materials for all subjects</p>
+                    </div>
+                </div>
+                
+                <div class="resource-grid">
+                    <div class="resource-card">
+                        <i class="fas fa-file-alt"></i>
+                        <h4>Subject Notes</h4>
+                        <p>Comprehensive notes for all subjects in your curriculum</p>
+                        <div class="resource-meta">
+                            <span>24 files</span>
+                            <span><i class="fas fa-download"></i></span>
+                        </div>
+                    </div>
+                    
+                    <div class="resource-card">
+                        <i class="fas fa-file-contract"></i>
+                        <h4>Reference Books</h4>
+                        <p>Digital copies of recommended textbooks and references</p>
+                        <div class="resource-meta">
+                            <span>18 files</span>
+                            <span><i class="fas fa-download"></i></span>
+                        </div>
+                    </div>
+                    
+                    <div class="resource-card">
+                        <i class="fas fa-file-powerpoint"></i>
+                        <h4>Presentation Slides</h4>
+                        <p>Slide decks used in classroom lectures</p>
+                        <div class="resource-meta">
+                            <span>32 files</span>
+                            <span><i class="fas fa-download"></i></span>
+                        </div>
+                    </div>
+                    
+                    <div class="resource-card">
+                        <i class="fas fa-video"></i>
+                        <h4>Video Lectures</h4>
+                        <p>Recorded lectures and tutorial videos</p>
+                        <div class="resource-meta">
+                            <span>45 files</span>
+                            <span><i class="fas fa-download"></i></span>
+                        </div>
+                    </div>
+                    
+                    <div class="resource-card">
+                        <i class="fas fa-tasks"></i>
+                        <h4>Practice Problems</h4>
+                        <p>Solved examples and practice questions with solutions</p>
+                        <div class="resource-meta">
+                            <span>28 files</span>
+                            <span><i class="fas fa-download"></i></span>
+                        </div>
+                    </div>
+                    
+                    <div class="resource-card">
+                        <i class="fas fa-clipboard-check"></i>
+                        <h4>Revision Sheets</h4>
+                        <p>Quick revision materials for exam preparation</p>
+                        <div class="resource-meta">
+                            <span>16 files</span>
+                            <span><i class="fas fa-download"></i></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Subject Viewer Views -->
+            <div id="branch-view" class="view">
+                <button class="btn back-btn" onclick="goBackToDashboard()">
+                    <i class="fas fa-arrow-left"></i> Back to Dashboard
+                </button>
+                
+                <h2 class="branch-title">Select Your Branch</h2>
+                <p class="branch-description">Choose your academic branch to view available semesters</p>
+                
+                <div class="branch-grid">
+                    <div class="branch-card" onclick="selectBranch('CSE')">
+                        <i class="fas fa-laptop-code"></i>
+                        <h3>Computer Science</h3>
+                    </div>
+                    <div class="branch-card" onclick="selectBranch('ECE')">
+                        <i class="fas fa-microchip"></i>
+                        <h3>Electronics</h3>
+                    </div>
+                    <div class="branch-card" onclick="selectBranch('ME')">
+                        <i class="fas fa-cogs"></i>
+                        <h3>Mechanical</h3>
+                    </div>
+                    <div class="branch-card" onclick="selectBranch('CE')">
+                        <i class="fas fa-hard-hat"></i>
+                        <h3>Civil</h3>
+                    </div>
+                    <div class="branch-card" onclick="selectBranch('EE')">
+                        <i class="fas fa-bolt"></i>
+                        <h3>Electrical</h3>
+                    </div>
+                    <div class="branch-card" onclick="selectBranch('IT')">
+                        <i class="fas fa-network-wired"></i>
+                        <h3>IT</h3>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Semester Selection View -->
+            <div id="semester-view" class="view">
+                <button class="btn back-btn" onclick="goBackToBranches()">
+                    <i class="fas fa-arrow-left"></i> Back to Branches
+                </button>
+                
+                <div class="branch-info">
+                    <div class="branch-icon-large">
+                        <i id="branch-icon-large"></i>
+                    </div>
+                    <div class="branch-details">
+                        <h2 id="branch-name">Computer Science</h2>
+                        <p id="branch-description">Select a semester to view subjects</p>
+                    </div>
+                </div>
+                
+                <div class="semester-grid">
+                    <div class="semester-card" onclick="selectSemester(1)">
+                        <i class="fas fa-book"></i>
+                        <h3>Semester 1</h3>
+                    </div>
+                    <div class="semester-card" onclick="selectSemester(2)">
+                        <i class="fas fa-book"></i>
+                        <h3>Semester 2</h3>
+                    </div>
+                    <div class="semester-card" onclick="selectSemester(3)">
+                        <i class="fas fa-book"></i>
+                        <h3>Semester 3</h3>
+                    </div>
+                    <div class="semester-card" onclick="selectSemester(4)">
+                        <i class="fas fa-book"></i>
+                        <h3>Semester 4</h3>
+                    </div>
+                    <div class="semester-card" onclick="selectSemester(5)">
+                        <i class="fas fa-book"></i>
+                        <h3>Semester 5</h3>
+                    </div>
+                    <div class="semester-card" onclick="selectSemester(6)">
+                        <i class="fas fa-book"></i>
+                        <h3>Semester 6</h3>
+                    </div>
+                    <div class="semester-card" onclick="selectSemester(7)">
+                        <i class="fas fa-book"></i>
+                        <h3>Semester 7</h3>
+                    </div>
+                    <div class="semester-card" onclick="selectSemester(8)">
+                        <i class="fas fa-book"></i>
+                        <h3>Semester 8</h3>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Subjects View -->
+            <div id="subjects-view" class="view">
+                <button class="btn back-btn" onclick="goBackToSemesters()">
+                    <i class="fas fa-arrow-left"></i> Back to Semesters
+                </button>
+                
+                <div class="branch-info">
+                    <div class="branch-icon-large">
+                        <i id="subjects-branch-icon"></i>
+                    </div>
+                    <div class="branch-details">
+                        <h2 id="subjects-title">Subjects for Semester 1 - Computer Science</h2>
+                        <p>List of all subjects in this semester</p>
+                    </div>
+                </div>
+                
+                <div class="subject-list" id="subject-list">
+                    <!-- Subjects will be dynamically added here -->
+                </div>
+            </div>
+            
+            <!-- Unit Selection View -->
+            <div id="unit-view" class="view">
+                <button class="btn back-btn" onclick="goBackToSubjects()">
+                    <i class="fas fa-arrow-left"></i> Back to Subjects
+                </button>
+                
+                <div class="subject-info">
+                    <div class="subject-icon-large">
+                        <i class="fas fa-book-open"></i>
+                    </div>
+                    <div class="subject-details-large">
+                        <h2 id="unit-subject-title">Mathematics I</h2>
+                        <p id="unit-subject-code">MATH101</p>
+                    </div>
+                </div>
+                
+                <h3 class="subject-title">Select a Unit</h3>
+                <p class="subject-description">Choose a unit to view detailed topics and study materials</p>
+                
+                <div class="unit-grid" id="unit-grid">
+                    <!-- Units will be dynamically added here -->
+                </div>
+            </div>
+            
+            <!-- Unit Content View -->
+            <div id="unit-content-view" class="view">
+                <button class="btn back-btn" onclick="goBackToUnits()">
+                    <i class="fas fa-arrow-left"></i> Back to Units
+                </button>
+                
+                <div class="subject-info">
+                    <div class="subject-icon-large">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <div class="subject-details-large">
+                        <h2 id="unit-content-title">Unit 1 - Mathematics I</h2>
+                        <p id="unit-content-subtitle">Detailed topics and study materials</p>
+                    </div>
+                </div>
+                
+                <div class="unit-content" id="unit-content">
+                    <!-- Unit content will be dynamically added here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentBranch = '';
+        let currentSemester = 1;
+        let currentSubject = null;
+        let currentUnit = 1;
+        let isLoggedIn = false;
+        let currentUser = null;
+        
+        // Branch icons mapping
+        const branchIcons = {
+            'CSE': 'fas fa-laptop-code',
+            'ECE': 'fas fa-microchip',
+            'ME': 'fas fa-cogs',
+            'CE': 'fas fa-hard-hat',
+            'EE': 'fas fa-bolt',
+            'IT': 'fas fa-network-wired'
+        };
+        
+        // Branch names mapping
+        const branchNames = {
+            'CSE': 'Computer Science & Engineering',
+            'ECE': 'Electronics & Communication Engineering',
+            'ME': 'Mechanical Engineering',
+            'CE': 'Civil Engineering',
+            'EE': 'Electrical Engineering',
+            'IT': 'Information Technology'
+        };
+        
+        // Sample subject data for each branch and semester with units and PDFs
+        const subjectData = {
+            'CSE': {
+                1: [
+                    { 
+                        name: "Mathematics I", 
+                        code: "MATH101",
+                        units: {
+                            1: [
+                                {
+                                    title: "Differential Calculus",
+                                    description: "Fundamental concepts of derivatives and their applications",
+                                    pdf: null
+                                },
+                                {
+                                    title: "Partial Differentiation",
+                                    description: "Multivariable calculus and partial derivatives",
+                                    pdf: null
+                                },
+                                {
+                                    title: "Maxima and Minima",
+                                    description: "Optimization problems using derivatives",
+                                    pdf: null
+                                },
+                                {
+                                    title: "Multiple Integrals",
+                                    description: "Double and triple integrals with applications",
+                                    pdf: null
+                                }
+                            ],
+                            2: [
+                                {
+                                    title: "Vector Calculus",
+                                    description: "Vector fields and vector operations",
+                                    pdf: null
+                                },
+                                {
+                                    title: "Gradient, Divergence and Curl",
+                                    description: "Differential operators in vector calculus",
+                                    pdf: null
+                                },
+                                {
+                                    title: "Line, Surface and Volume Integrals",
+                                    description: "Integration in vector fields",
+                                    pdf: null
+                                }
+                            ],
+                            3: [
+                                {
+                                    title: "Linear Algebra",
+                                    description: "Vector spaces and linear transformations",
+                                    pdf: null
+                                },
+                                {
+                                    title: "Matrices and Determinants",
+                                    description: "Matrix operations and properties",
+                                    pdf: null
+                                },
+                                {
+                                    title: "Eigenvalues and Eigenvectors",
+                                    description: "Characteristic equations and diagonalization",
+                                    pdf: null
+                                }
+                            ],
+                            4: [
+                                {
+                                    title: "Probability Theory",
+                                    description: "Basic concepts of probability",
+                                    pdf: null
+                                },
+                                {
+                                    title: "Random Variables",
+                                    description: "Discrete and continuous random variables",
+                                    pdf: null
+                                },
+                                {
+                                    title: "Probability Distributions",
+                                    description: "Common probability distributions",
+                                    pdf: null
+                                }
+                            ],
+                            5: [
+                                {
+                                    title: "Numerical Methods",
+                                    description: "Approximation techniques for mathematical problems",
+                                    pdf: null
+                                },
+                                {
+                                    title: "Solution of Equations",
+                                    description: "Numerical methods for solving equations",
+                                    pdf: null
+                                },
+                                {
+                                    title: "Interpolation and Numerical Integration",
+                                    description: "Approximation of integrals and data fitting",
+                                    pdf: null
+                                }
+                            ]
+                        }
+                    },
+                    { 
+                        name: "Physics I", 
+                        code: "PHYS101",
+                        units: {
+                            1: [
+                                {
+                                    title: "Mechanics",
+                                    description: "Classical mechanics and motion",
+                                    pdf: null
+                                },
+                                {
+                                    title: "Laws of Motion",
+                                    description: "Newton's laws and their applications",
+                                    pdf: null
+                                },
+                                {
+                                    title: "Work, Energy and Power",
+                                    description: "Energy concepts in mechanical systems",
+                                    pdf: null
+                                }
+                            ],
+                            2: [
+                                {
+                                    title: "Properties of Matter",
+                                    description: "Physical properties of different states of matter",
+                                    pdf: null
+                                },
+                                {
+                                    title: "Elasticity",
+                                    description: "Stress, strain and elastic moduli",
+                                    pdf: null
+                                },
+                                {
+                                    title: "Surface Tension",
+                                    description: "Surface phenomena and capillary action",
+                                    pdf: null
+                                }
+                            ],
+                            3: [
+                                {
+                                    title: "Thermodynamics",
+                                    description: "Laws of thermodynamics and heat transfer",
+                                    pdf: null
+                                },
+                                {
+                                    title: "Laws of Thermodynamics",
+                                    description: "Fundamental principles of thermodynamics",
+                                    pdf: null
+                                },
+                                {
+                                    title: "Heat Engines",
+                                    description: "Thermal efficiency and engine cycles",
+                                    pdf: null
+                                }
+                            ],
+                            4: [
+                                {
+                                    title: "Waves and Oscillations",
+                                    description: "Wave motion and oscillatory systems",
+                                    pdf: null
+                                },
+                                {
+                                    title: "Simple Harmonic Motion",
+                                    description: "Periodic motion and its characteristics",
+                                    pdf: null
+                                },
+                                {
+                                    title: "Wave Motion",
+                                    description: "Wave properties and behavior",
+                                    pdf: null
+                                }
+                            ],
+                            5: [
+                                {
+                                    title: "Optics",
+                                    description: "Light behavior and optical phenomena",
+                                    pdf: null
+                                },
+                                {
+                                    title: "Interference and Diffraction",
+                                    description: "Wave nature of light",
+                                    pdf: null
+                                },
+                                {
+                                    title: "Polarization",
+                                    description: "Polarized light and its applications",
+                                    pdf: null
+                                }
+                            ]
+                        }
+                    },
+                    { 
+                        name: "Programming Fundamentals", 
+                        code: "CS101",
+                        units: {
+                            1: [
+                                {
+                                    title: "Introduction to Programming",
+                                    description: "Basic concepts of programming and problem solving",
+                                    pdf: "C:\\Users\\Acer\\OneDrive\\Desktop\\STUDY\\pps\\unit1.pdf"
+                                },
+                                {
+                                    title: "Algorithms and Flowcharts",
+                                    description: "Problem-solving techniques and visual representation",
+                                    pdf: "C:\\Users\\Acer\\OneDrive\\Desktop\\STUDY\\pps\\unit1.pdf"
+                                },
+                                {
+                                    title: "Programming Paradigms",
+                                    description: "Different approaches to programming",
+                                    pdf: "C:\\Users\\Acer\\OneDrive\\Desktop\\STUDY\\pps\\unit1.pdf"
+                                }
+                            ],
+                            2: [
+                                {
+                                    title: "Data Types and Variables",
+                                    description: "Fundamental data types and variable declaration",
+                                    pdf: "C:\\Users\\Acer\\OneDrive\\Desktop\\STUDY\\pps\\unit2.pdf"
+                                },
+                                {
+                                    title: "Operators and Expressions",
+                                    description: "Arithmetic, relational and logical operations",
+                                    pdf: "C:\\Users\\Acer\\OneDrive\\Desktop\\STUDY\\pps\\unit2.pdf"
+                                },
+                                {
+                                    title: "Input and Output",
+                                    description: "Reading input and displaying output",
+                                    pdf: "C:\\Users\\Acer\\OneDrive\\Desktop\\STUDY\\pps\\unit2.pdf"
+                                }
+                            ],
+                            3: [
+                                {
+                                    title: "Control Structures",
+                                    description: "Decision making and loop structures",
+                                    pdf: "C:\\Users\\Acer\\OneDrive\\Desktop\\STUDY\\pps\\unit3.pdf"
+                                },
+                                {
+                                    title: "Conditional Statements",
+                                    description: "If-else and switch statements",
+                                    pdf: "C:\\Users\\Acer\\OneDrive\\Desktop\\STUDY\\pps\\unit3.pdf"
+                                },
+                                {
+                                    title: "Loops and Iteration",
+                                    description: "For, while and do-while loops",
+                                    pdf: "C:\\Users\\Acer\\OneDrive\\Desktop\\STUDY\\pps\\unit3.pdf"
+                                }
+                            ],
+                            4: [
+                                {
+                                    title: "Functions and Procedures",
+                                    description: "Modular programming with functions",
+                                    pdf: "C:\\Users\\Acer\\OneDrive\\Desktop\\STUDY\\pps\\unit4.pdf"
+                                },
+                                {
+                                    title: "Parameter Passing",
+                                    description: "Different methods of passing parameters",
+                                    pdf: "C:\\Users\\Acer\\OneDrive\\Desktop\\STUDY\\pps\\unit4.pdf"
+                                },
+                                {
+                                    title: "Recursion",
+                                    description: "Recursive functions and their applications",
+                                    pdf: "C:\\Users\\Acer\\OneDrive\\Desktop\\STUDY\\pps\\unit4.pdf"
+                                }
+                            ],
+                            5: [
+                                {
+                                    title: "Arrays and Strings",
+                                    description: "Data structures for storing multiple values",
+                                    pdf: "C:\\Users\\Acer\\OneDrive\\Desktop\\STUDY\\pps\\unit5.pdf"
+                                },
+                                {
+                                    title: "Pointers and Memory Management",
+                                    description: "Memory addresses and dynamic allocation",
+                                    pdf: "C:\\Users\\Acer\\OneDrive\\Desktop\\STUDY\\pps\\unit5.pdf"
+                                },
+                                {
+                                    title: "File Handling",
+                                    description: "Reading from and writing to files",
+                                    pdf: "C:\\Users\\Acer\\OneDrive\\Desktop\\STUDY\\pps\\unit5.pdf"
+                                }
+                            ]
+                        }
+                    }
+                ],
+                2: [
+                    { 
+                        name: "Mathematics II", 
+                        code: "MATH102",
+                        units: {
+                            1: [
+                                {
+                                    title: "Ordinary Differential Equations",
+                                    description: "First and higher order differential equations",
+                                    pdf: null
+                                },
+                                {
+                                    title: "First Order Equations",
+                                    description: "Solving first order differential equations",
+                                    pdf: null
+                                },
+                                {
+                                    title: "Higher Order Linear Equations",
+                                    description: "Methods for higher order equations",
+                                    pdf: null
+                                }
+                            ],
+                            2: [
+                                {
+                                    title: "Laplace Transforms",
+                                    description: "Transform methods for differential equations",
+                                    pdf: null
+                                },
+                                {
+                                    title: "Properties and Applications",
+                                    description: "Laplace transform properties and uses",
+                                    pdf: null
+                                },
+                                {
+                                    title: "Inverse Laplace Transforms",
+                                    description: "Retrieving original functions from transforms",
+                                    pdf: null
+                                }
+                            ],
+                            3: [
+                                {
+                                    title: "Fourier Series",
+                                    description: "Periodic function representation",
+                                    pdf: null
+                                },
+                                {
+                                    title: "Periodic Functions",
+                                    description: "Analysis of periodic phenomena",
+                                    pdf: null
+                                },
+                                {
+                                    title: "Half-range Expansions",
+                                    description: "Fourier series for limited intervals",
+                                    pdf: null
+                                }
+                            ],
+                            4: [
+                                {
+                                    title: "Complex Variables",
+                                    description: "Functions of complex variables",
+                                    pdf: null
+                                },
+                                {
+                                    title: "Analytic Functions",
+                                    description: "Differentiable complex functions",
+                                    pdf: null
+                                },
+                                {
+                                    title: "Complex Integration",
+                                    description: "Integration in the complex plane",
+                                    pdf: null
+                                }
+                            ],
+                            5: [
+                                {
+                                    title: "Partial Differential Equations",
+                                    description: "Equations with multiple independent variables",
+                                    pdf: null
+                                },
+                                {
+                                    title: "First Order PDEs",
+                                    description: "Classification and solution methods",
+                                    pdf: null
+                                },
+                                {
+                                    title: "Second Order Linear PDEs",
+                                    description: "Wave, heat and Laplace equations",
+                                    pdf: null
+                                }
+                            ]
+                        }
+                    },
+                    { 
+                        name: "Data Structures", 
+                        code: "CS102",
+                        units: {
+                            1: [
+                                {
+                                    title: "Introduction to Data Structures",
+                                    description: "Basic concepts and importance of data structures",
+                                    pdf: null
+                                },
+                                {
+                                    title: "Arrays and Linked Lists",
+                                    description: "Linear data structures and their operations",
+                                    pdf: null
+                                },
+                                {
+                                    title: "Stacks and Queues",
+                                    description: "LIFO and FIFO data structures",
+                                    pdf: null
+                                }
+                            ],
+                            2: [
+                                {
+                                    title: "Trees",
+                                    description: "Hierarchical data structures",
+                                    pdf: null
+                                },
+                                {
+                                    title: "Binary Trees",
+                                    description: "Tree structures with at most two children",
+                                    pdf: null
+                                },
+                                {
+                                    title: "Binary Search Trees",
+                                    description: "Ordered binary trees for efficient searching",
+                                    pdf: null
+                                }
+                            ],
+                            3: [
+                                {
+                                    title: "Graphs",
+                                    description: "Network structures and their representations",
+                                    pdf: null
+                                },
+                                {
+                                    title: "Graph Representation",
+                                    description: "Adjacency matrix and list representations",
+                                    pdf: null
+                                },
+                                {
+                                    title: "Graph Traversal Algorithms",
+                                    description: "BFS and DFS algorithms",
+                                    pdf: null
+                                }
+                            ],
+                            4: [
+                                {
+                                    title: "Sorting Algorithms",
+                                    description: "Methods for arranging data in order",
+                                    pdf: null
+                                },
+                                {
+                                    title: "Bubble Sort, Selection Sort",
+                                    description: "Simple comparison-based sorting",
+                                    pdf: null
+                                },
+                                {
+                                    title: "Quick Sort, Merge Sort",
+                                    description: "Efficient divide-and-conquer sorting",
+                                    pdf: null
+                                }
+                            ],
+                            5: [
+                                {
+                                    title: "Searching Algorithms",
+                                    description: "Methods for finding elements in data structures",
+                                    pdf: null
+                                },
+                                {
+                                    title: "Linear Search",
+                                    description: "Sequential search algorithm",
+                                    pdf: null
+                                },
+                                {
+                                    title: "Binary Search",
+                                    description: "Efficient search on sorted data",
+                                    pdf: null
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            'ECE': {
+                1: [
+                    { 
+                        name: "Mathematics I", 
+                        code: "MATH101",
+                        units: {
+                            1: [
+                                {
+                                    title: "Differential Calculus",
+                                    description: "Fundamental concepts of derivatives",
+                                    pdf: null
+                                },
+                                {
+                                    title: "Partial Differentiation",
+                                    description: "Multivariable calculus",
+                                    pdf: null
+                                },
+                                {
+                                    title: "Maxima and Minima",
+                                    description: "Optimization using derivatives",
+                                    pdf: null
+                                }
+                            ],
+                            2: [
+                                {
+                                    title: "Integral Calculus",
+                                    description: "Definite and indefinite integrals",
+                                    pdf: null
+                                },
+                                {
+                                    title: "Multiple Integrals",
+                                    description: "Double and triple integrals",
+                                    pdf: null
+                                },
+                                {
+                                    title: "Vector Calculus",
+                                    description: "Vector fields and operations",
+                                    pdf: null
+                                }
+                            ],
+                            3: [
+                                {
+                                    title: "Linear Algebra",
+                                    description: "Vector spaces and matrices",
+                                    pdf: null
+                                },
+                                {
+                                    title: "Matrices and Determinants",
+                                    description: "Matrix operations",
+                                    pdf: null
+                                },
+                                {
+                                    title: "Eigenvalues and Eigenvectors",
+                                    description: "Characteristic equations",
+                                    pdf: null
+                                }
+                            ],
+                            4: [
+                                {
+                                    title: "Differential Equations",
+                                    description: "Ordinary differential equations",
+                                    pdf: null
+                                },
+                                {
+                                    title: "First Order ODEs",
+                                    description: "Solving first order equations",
+                                    pdf: null
+                                },
+                                {
+                                    title: "Higher Order Linear ODEs",
+                                    description: "Methods for higher order equations",
+                                    pdf: null
+                                }
+                            ],
+                            5: [
+                                {
+                                    title: "Probability and Statistics",
+                                    description: "Basic probability concepts",
+                                    pdf: null
+                                },
+                                {
+                                    title: "Random Variables",
+                                    description: "Discrete and continuous variables",
+                                    pdf: null
+                                },
+                                {
+                                    title: "Probability Distributions",
+                                    description: "Common distributions",
+                                    pdf: null
+                                }
+                            ]
+                        }
+                    },
+                    { 
+                        name: "Basic Electronics", 
+                        code: "ECE101",
+                        units: {
+                            1: [
+                                {
+                                    title: "Semiconductor Physics",
+                                    description: "Properties of semiconductor materials",
+                                    pdf: null
+                                },
+                                {
+                                    title: "PN Junction Diode",
+                                    description: "Diode operation and characteristics",
+                                    pdf: null
+                                },
+                                {
+                                    title: "Diode Applications",
+                                    description: "Practical uses of diodes",
+                                    pdf: null
+                                }
+                            ],
+                            2: [
+                                {
+                                    title: "Bipolar Junction Transistor",
+                                    description: "BJT operation and configurations",
+                                    pdf: null
+                                },
+                                {
+                                    title: "Transistor Characteristics",
+                                    description: "Input and output characteristics",
+                                    pdf: null
+                                },
+                                {
+                                    title: "Transistor Biasing",
+                                    description: "DC biasing circuits",
+                                    pdf: null
+                                }
+                            ],
+                            3: [
+                                {
+                                    title: "Field Effect Transistors",
+                                    description: "FET operation and types",
+                                    pdf: null
+                                },
+                                {
+                                    title: "JFET and MOSFET",
+                                    description: "Different FET technologies",
+                                    pdf: null
+                                },
+                                {
+                                    title: "FET Amplifiers",
+                                    description: "Amplifier circuits using FETs",
+                                    pdf: null
+                                }
+                            ],
+                            4: [
+                                {
+                                    title: "Operational Amplifiers",
+                                    description: "Ideal op-amp characteristics",
+                                    pdf: null
+                                },
+                                {
+                                    title: "Ideal Op-amp",
+                                    description: "Theoretical op-amp model",
+                                    pdf: null
+                                },
+                                {
+                                    title: "Op-amp Applications",
+                                    description: "Practical op-amp circuits",
+                                    pdf: null
+                                }
+                            ],
+                            5: [
+                                {
+                                    title: "Oscillators and Timers",
+                                    description: "Signal generation circuits",
+                                    pdf: null
+                                },
+                                {
+                                    title: "Feedback Amplifiers",
+                                    description: "Amplifiers with feedback",
+                                    pdf: null
+                                },
+                                {
+                                    title: "Multivibrators",
+                                    description: "Astable, monostable and bistable circuits",
+                                    pdf: null
+                                }
+                            ]
+                        }
+                    }
+                ]
+            }
+        };
+        
+        // Semester descriptions
+        const semesterDescriptions = {
+            1: "This semester covers foundational courses in your program, establishing the basic principles you'll build upon in future semesters.",
+            2: "Building on the first semester, these courses delve deeper into core concepts and introduce more specialized topics.",
+            3: "This semester marks a transition to more advanced topics, with a focus on theoretical foundations and problem-solving techniques.",
+            4: "Courses in this semester focus on system-level concepts and practical applications of previously learned principles.",
+            5: "Specialized courses in this semester allow you to explore specific areas of interest within your field of study.",
+            6: "Advanced topics and specialized electives characterize this semester, preparing you for industry or research.",
+            7: "This semester focuses on cutting-edge technologies and advanced concepts in your field.",
+            8: "The final semester focuses on capstone projects and prepares you for professional work or further academic pursuits."
+        };
+        
+        // Navigation functions
+        function goHome() {
+            hideAllViews();
+            document.getElementById('home-view').classList.add('active');
+        }
+        
+        function showLogin() {
+            hideAllViews();
+            document.getElementById('login-view').classList.add('active');
+        }
+        
+        function showRegister() {
+            hideAllViews();
+            document.getElementById('register-view').classList.add('active');
+        }
+        
+        function showDashboard() {
+            hideAllViews();
+            document.getElementById('dashboard-view').classList.add('active');
+        }
+        
+        function showSubjectViewer() {
+            hideAllViews();
+            document.getElementById('branch-view').classList.add('active');
+        }
+        
+        function showPYQs() {
+            hideAllViews();
+            document.getElementById('pyqs-view').classList.add('active');
+        }
+        
+        function showCurriculum() {
+            hideAllViews();
+            document.getElementById('curriculum-view').classList.add('active');
+        }
+        
+        function showNotes() {
+            hideAllViews();
+            document.getElementById('notes-view').classList.add('active');
+        }
+        
+        function hideAllViews() {
+            const views = document.querySelectorAll('.view');
+            views.forEach(view => {
+                view.classList.remove('active');
+            });
+        }
+        
+        function selectBranch(branch) {
+            currentBranch = branch;
+            
+            // Update branch info in semester view
+            document.getElementById('branch-name').textContent = branchNames[branch];
+            document.getElementById('branch-icon-large').className = branchIcons[branch];
+            
+            // Switch to semester view
+            hideAllViews();
+            document.getElementById('semester-view').classList.add('active');
+        }
+        
+        function selectSemester(semester) {
+            currentSemester = semester;
+            
+            // Update semester details view
+            document.getElementById('subjects-title').textContent = 
+                `Subjects for Semester ${semester} - ${branchNames[currentBranch]}`;
+            document.getElementById('subjects-branch-icon').className = branchIcons[currentBranch];
+            
+            // Clear previous subjects
+            const subjectList = document.getElementById('subject-list');
+            subjectList.innerHTML = '';
+            
+            // Add subjects for current branch and semester
+            if (subjectData[currentBranch] && subjectData[currentBranch][currentSemester]) {
+                subjectData[currentBranch][currentSemester].forEach(subject => {
+                    const subjectItem = document.createElement('div');
+                    subjectItem.className = 'subject-item';
+                    subjectItem.onclick = () => selectSubject(subject);
+                    
+                    subjectItem.innerHTML = `
+                        <div class="subject-icon">
+                            <i class="fas fa-book-open"></i>
+                        </div>
+                        <div class="subject-details">
+                            <div class="subject-name">${subject.name}</div>
+                            <div class="subject-code">${subject.code}</div>
+                        </div>
+                    `;
+                    
+                    subjectList.appendChild(subjectItem);
+                });
+            } else {
+                subjectList.innerHTML = '<p>No subjects available for this semester.</p>';
+            }
+            
+            // Switch to subjects view
+            hideAllViews();
+            document.getElementById('subjects-view').classList.add('active');
+        }
+        
+        function selectSubject(subject) {
+            currentSubject = subject;
+            
+            // Update unit view
+            document.getElementById('unit-subject-title').textContent = subject.name;
+            document.getElementById('unit-subject-code').textContent = subject.code;
+            
+            // Clear previous units
+            const unitGrid = document.getElementById('unit-grid');
+            unitGrid.innerHTML = '';
+            
+            // Add units 1 to 5
+            for (let i = 1; i <= 5; i++) {
+                const unitCard = document.createElement('div');
+                unitCard.className = 'unit-card';
+                unitCard.onclick = () => selectUnit(i);
+                
+                unitCard.innerHTML = `
+                    <i class="fas fa-layer-group"></i>
+                    <h3>Unit ${i}</h3>
+                    <p>Click to view topics</p>
+                `;
+                
+                unitGrid.appendChild(unitCard);
+            }
+            
+            // Switch to unit view
+            hideAllViews();
+            document.getElementById('unit-view').classList.add('active');
+        }
+        
+        function selectUnit(unit) {
+            currentUnit = unit;
+            
+            // Update unit content view
+            document.getElementById('unit-content-title').textContent = 
+                `Unit ${unit} - ${currentSubject.name}`;
+            document.getElementById('unit-content-subtitle').textContent = 
+                `Detailed topics for ${currentSubject.code}`;
+            
+            // Clear previous unit content
+            const unitContent = document.getElementById('unit-content');
+            unitContent.innerHTML = '';
+            
+            // Add unit topics
+            if (currentSubject.units && currentSubject.units[unit]) {
+                currentSubject.units[unit].forEach(topic => {
+                    const topicElement = document.createElement('div');
+                    topicElement.className = 'unit-topic';
+                    
+                    let pdfLink = '';
+                    if (topic.pdf) {
+                        pdfLink = `
+                            <a href="${topic.pdf}" class="pdf-link" target="_blank">
+                                <i class="fas fa-file-pdf"></i>
+                                Download PDF
+                            </a>
+                        `;
+                    }
+                    
+                    topicElement.innerHTML = `
+                        <h4>${topic.title}</h4>
+                        <p>${topic.description}</p>
+                        ${pdfLink}
+                    `;
+                    
+                    unitContent.appendChild(topicElement);
+                });
+            } else {
+                unitContent.innerHTML = '<p>No topics available for this unit.</p>';
+            }
+            
+            // Switch to unit content view
+            hideAllViews();
+            document.getElementById('unit-content-view').classList.add('active');
+        }
+        
+        function goBackToDashboard() {
+            hideAllViews();
+            document.getElementById('dashboard-view').classList.add('active');
+        }
+        
+        function goBackToBranches() {
+            hideAllViews();
+            document.getElementById('branch-view').classList.add('active');
+        }
+        
+        function goBackToSemesters() {
+            hideAllViews();
+            document.getElementById('semester-view').classList.add('active');
+        }
+        
+        function goBackToSubjects() {
+            hideAllViews();
+            document.getElementById('subjects-view').classList.add('active');
+        }
+        
+        function goBackToUnits() {
+            hideAllViews();
+            document.getElementById('unit-view').classList.add('active');
+        }
+        
+        function logout() {
+            isLoggedIn = false;
+            currentUser = null;
+            goHome();
+        }
+        
+        // Form handling
+        document.getElementById('login-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value;
+            
+            // In a real app, you would validate and send to server
+            isLoggedIn = true;
+            currentUser = {
+                name: email.split('@')[0],
+                email: email
+            };
+            
+            // Update user info in dashboard
+            document.getElementById('user-name').textContent = currentUser.name;
+            document.getElementById('user-email').textContent = currentUser.email;
+            
+            alert('Login successful!');
+            showDashboard();
+        });
+        
+        document.getElementById('register-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('register-name').value;
+            const email = document.getElementById('register-email').value;
+            const password = document.getElementById('register-password').value;
+            const confirmPassword = document.getElementById('register-confirm-password').value;
+            
+            if (password !== confirmPassword) {
+                alert('Passwords do not match!');
+                return;
+            }
+            
+            // In a real app, you would send to server
+            isLoggedIn = true;
+            currentUser = {
+                name: name,
+                email: email
+            };
+            
+            // Update user info in dashboard
+            document.getElementById('user-name').textContent = currentUser.name;
+            document.getElementById('user-email').textContent = currentUser.email;
+            
+            alert('Registration successful!');
+            showDashboard();
+        });
+    </script>
+</body>
+</html>
